@@ -3,7 +3,7 @@ RUN apt-get update && apt-get install -y gcc g++ make curl zlib1g-dev libjpeg-de
     && ln -s /usr/bin/vim.tiny /usr/local/bin/vi \
     && ln -s /usr/bin/vim.tiny /usr/local/bin/vim
 ENV C_INCLUDE_PATH=/usr/include/freetype2
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /usr/local/bin/
+COPY --from=ghcr.io/astral-sh/uv:0.11.15 /uv /uvx /usr/local/bin/
 ENV UV_SYSTEM_PYTHON=1
 WORKDIR /app
 COPY entry.sh /usr/local/bin/
