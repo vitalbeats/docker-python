@@ -1,12 +1,10 @@
-FROM python:3.9.20-bookworm
-RUN apt-get update && apt-get install -y gcc g++ make curl zlib1g-dev libjpeg-dev libxml2-dev libxslt-dev libfreetype6-dev libmupdf-dev tzdata
-ENV C_INCLUDE_PATH $C_INCLUDE_PATH:/usr/include/freetype2
-RUN python -m pip install --upgrade pip
-RUN pip install poetry==1.4.1
-ENV PATH /root/.poetry/bin:$PATH
-RUN poetry config virtualenvs.create false && \
-    poetry config virtualenvs.in-project false && \
-    poetry config installer.modern-installation false
+FROM python:3.13-slim-bookworm
+RUN apt-get update && apt-get install -y gcc g++ make curl zlib1g-dev libjpeg-dev libxml2-dev libxslt-dev libfreetype6-dev libmupdf-dev tzdata vim-tiny && rm -rf /var/lib/apt/lists/* \
+    && ln -s /usr/bin/vim.tiny /usr/local/bin/vi \
+    && ln -s /usr/bin/vim.tiny /usr/local/bin/vim
+ENV C_INCLUDE_PATH=/usr/include/freetype2
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /usr/local/bin/
+ENV UV_SYSTEM_PYTHON=1
 WORKDIR /app
 COPY entry.sh /usr/local/bin/
 ENTRYPOINT ["/usr/local/bin/entry.sh"]
